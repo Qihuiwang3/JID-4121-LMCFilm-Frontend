@@ -21,7 +21,7 @@ const BarCodePopup = ({ show, orderNumber, handleClose }) => {
             }
         };
         fetchOrders();
-    }, []);
+    }, [orderNumber]);
 
 
 

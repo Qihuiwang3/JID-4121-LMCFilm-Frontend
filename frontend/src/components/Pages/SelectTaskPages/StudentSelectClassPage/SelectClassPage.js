@@ -11,7 +11,6 @@ import { getClassInfoByCode, removeClassCode } from '../../../../connector';
 const SelectClassPage = () => {
   const [classes, setClasses] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [selectedClassId, setSelectedClassId] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -88,7 +87,7 @@ const SelectClassPage = () => {
             <div className="class-icon">
               <img className='image' src={film} alt="Class Icon" />
             </div>
-            <div className={`class-info ${selectedClassId === classInfo.code ? 'selected' : ''}`}>
+            <div className={`class-info ${classInfo.code ? 'selected' : ''}`}>
               <div className="class-name">{classInfo.className}</div>
               <div className="instructor-name">Instructor: {classInfo.professor}</div>
             </div>

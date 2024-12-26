@@ -66,7 +66,7 @@ const Login = () => {
                     navigate('/Enter');
                 }
             } else {
-                const response = await createStudent({
+                await createStudent({
                     name: formData.name,
                     email: formData.email,
                     password: formData.password,

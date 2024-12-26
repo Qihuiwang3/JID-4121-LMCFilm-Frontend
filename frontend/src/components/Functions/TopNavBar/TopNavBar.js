@@ -24,11 +24,6 @@ const TopNavBar = () => {
         setIsSidebarOpen(false);
     };
 
-    const toggleDropdown = () => {
-        const { isDroppedDown } = this.state;
-        this.setState({ isDroppedDown: !isDroppedDown })
-    }
-
     const profileNav = () => {
         navigate("/ReservationHistory");
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AgGridTable from '../AgGridTable/AgGridTable';
 import { getAllOrders, getAllDamageReports } from '../../../connector';
 import { useLocation } from 'react-router-dom';
@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import BarCodePopup from '../../Modal/BarCodePopup/BarCodePopup';
 import './ReservationHistoryTable.css';
 import ReservationHistoryViewDamageReportModal from '../../Modal/ReservationHistoryViewDamageReportModal/ReservationHistoryViewDamageReportModal';
-
 import ReservationDetailPopup from '../../Modal/ReservationDetailPopup/ReservationDetailPopup';
 
 const ReservationHistoryTable = () => {
@@ -19,7 +18,7 @@ const ReservationHistoryTable = () => {
 
     const [allDamageReports, setAllDamageReports] = useState([]);
 
-    const loadRecords = async () => {
+    const loadRecords = useCallback(async () => {
         try {
             const records = await getAllOrders();
             const studentInfo = location.state?.studentInfo || reduxStudentInfo;
@@ -37,16 +36,25 @@ const ReservationHistoryTable = () => {
                     studentName: record.studentName,
                     ...record,
                 }));
-                setRecords(transformedRecords);
-            } catch (error) {
-                console.error("Error loading records:", error);
+            setRecords(transformedRecords);
+        } catch (error) {
+            console.error("Error loading records:", error);
         }
-    };
+    }, [location.state, reduxStudentInfo]);
+
+    const loadDamageReports = useCallback(async () => {
+        try {
+            const damageReports = await getAllDamageReports();
+            setAllDamageReports(damageReports);
+        } catch (error) {
+            console.error("Error loading damage reports:", error);
+        }
+    }, []);
 
     useEffect(() => {
         loadRecords();
         loadDamageReports();
-    }, [location.state, reduxStudentInfo]);
+    }, [loadRecords, loadDamageReports]);
 
     const handleViewReport = (orderNumber) => {
         setViewReportId(orderNumber);
@@ -70,17 +78,6 @@ const ReservationHistoryTable = () => {
         setViewDamageReportInfo(null);
         setViewOrderDetailsId(null);
     };
-
-    const loadDamageReports = async () => {
-        try {
-            const damageReports = await getAllDamageReports();
-            setAllDamageReports(damageReports);
-        } catch (error) {
-            console.error("Error loading damage reports:", error);
-        }
-    };
-
-
 
     const columnDefs = [
         {
@@ -131,7 +128,7 @@ const ReservationHistoryTable = () => {
                 const orderNumber = params.data.code;
 
                 const hasDamageReport = allDamageReports.some(
-                    (report) => report.orderNumber == orderNumber
+                    (report) => report.orderNumber === orderNumber
                 );
 
                 return hasDamageReport ? (
@@ -210,15 +207,15 @@ const ReservationHistoryTable = () => {
                     handleClose={handleCloseModal}
                 />
             )}
-           {viewOrderDetailsId && (
+            {viewOrderDetailsId && (
                 <ReservationDetailPopup
                     reservationDetails={viewOrderDetailsId}
                     onClose={handleCloseModal}
                     onOrderCancelled={loadRecords}
                     onOrderExtended={loadRecords}
-                    showButtons={true} 
-    />
-)}
+                    showButtons={true}
+                />
+            )}
 
         </>
     );

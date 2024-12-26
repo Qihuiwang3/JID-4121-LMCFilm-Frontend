@@ -13,7 +13,6 @@ import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 const DamageTable = () => {
     const [records, setRecords] = useState([]);
     const [filteredRecords, setFilteredRecords] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
     const [showAddNewPopup, setShowAddNewPopup] = useState(false);
     const [viewReportId, setViewReportId] = useState(null);
     const [editReportData, setEditReportData] = useState(null);
@@ -71,7 +70,6 @@ const DamageTable = () => {
     };
 
     const handleSearch = (query) => {
-        setSearchQuery(query);
         const filtered = records.filter(record => record.itemId.toLowerCase().includes(query.toLowerCase()));
         setFilteredRecords(filtered);
     };

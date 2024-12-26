@@ -4,7 +4,6 @@ import EquipmentTable from '../../Functions/EquipmentTable/EquipmentTable';
 import { useNavigate } from 'react-router-dom';
 
 const Equipment = () => {
-    const [showPopup, setShowPopup] = useState(false);
     const navigate = useNavigate();
 
     const [isEditMode, setIsEditMode] = useState(false);
@@ -15,14 +14,6 @@ const Equipment = () => {
             equipmentTableRef.current.loadRecords();
         }
         setIsEditMode(!isEditMode);
-    };
-    
-    const handleOpenPopup = () => {
-        setShowPopup(true);
-    };
-
-    const handleClosePopup = () => {
-        setShowPopup(false);
     };
 
     const handleBack = () => {
@@ -35,7 +26,6 @@ const Equipment = () => {
                 ref={equipmentTableRef}
                 isEditMode={isEditMode}
                 toggleEditMode={toggleEditMode}
-                handleOpenPopup={handleOpenPopup}
             />
 
             <div className="equipment-btn">
